@@ -7,7 +7,7 @@ A web app for a GB energy buyer who purchases power on the day-ahead market. It 
 
 Data: national (Great Britain) wind only, from Elexon. Scope: purchase decisions made in **January 2026**, which means delivery days **2 Jan to 1 Feb 2026** (a decision is made the day before delivery).
 
-**Live app:** `<add your Vercel link here>`
+**Live app:** `https://wind-forecast-day-ahead.vercel.app/`
 
 ## How it works
 
@@ -47,7 +47,16 @@ The first two days have no range, because there are not enough earlier results t
 
 ## Assumptions
 
-- **Decision deadline: 09:00 UTC on the day before delivery.** This is our assumption, not a confirmed fact. Public exchange notices put the main GB day-ahead auction closes at roughly 09:20 to 09:50, but those sources are dated 2020/2021 and should be checked. The deadline is configurable (`cutoff_hour` on the API). Sensitivity: `<fill in after re-running backend/sensitivity.py on the final window>`.
+- **Decision deadline: 09:00 UTC on the day before delivery.** This is our assumption, not a confirmed fact. Public exchange notices put the main GB day-ahead auction closes at roughly 09:20 to 09:50, but those sources are dated 2020/2021 and should be checked. The deadline is configurable (`cutoff_hour` on the API). Sensitivity: re-running `backend/sensitivity.py` with cutoffs from 06:00 to 12:00 UTC on the same 744 hours gave the results below. MAE stayed between 1,901 and 2,039 MW, and the forecast was too high in every case.
+
+  | Cutoff (UTC) | MAE (MW) | Bias (MW) |
+  |---|---|---|
+  | 06:00 | 2,016.1 | +1,671.0 |
+  | 08:00 | 2,038.9 | +1,747.9 |
+  | 09:00 (used) | 2,038.9 | +1,747.9 |
+  | 10:00 | 2,013.0 | +1,729.9 |
+  | 12:00 | 1,901.0 | +1,687.2 |
+
 - **Time zone:** Elexon times are UTC. In January UK time equals UTC, so no conversion is applied.
 - **Hourly comparison:** forecasts are hourly and actuals half-hourly, so each pair of half-hour actuals is averaged into one hourly value.
 - **A forecast published exactly at the deadline is allowed.**
@@ -91,7 +100,7 @@ Dockerfile, docker-compose.yml
 
 AI tools were used to build this project, as the assignment allows:
 
-- **Claude (Anthropic):** used to understand the problem and the data,and interpret the results.
-- **Cursor:** used for <give designed paln a structure>.
+- **Claude (Anthropic):** used to understand the problem and the data and to interpret the results.
+- **Cursor:** used to plan the design and structure of project.
 
 I ran the code and the tests myself and checked the outputs.
