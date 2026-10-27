@@ -1,0 +1,6 @@
+requests
+pandas
+pytest
+fastapi
+uvicorn
+httpx
